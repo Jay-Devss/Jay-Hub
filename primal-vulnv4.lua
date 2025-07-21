@@ -3,6 +3,7 @@ repeat task.wait() until game:IsLoaded()
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TeleportService = game:GetService("TeleportService")
+local HttpService = game:GetService("HttpService")
 local LocalPlayer = Players.LocalPlayer
 local Backpack = LocalPlayer:WaitForChild("Backpack")
 local CraftingService = ReplicatedStorage:WaitForChild("GameEvents"):WaitForChild("CraftingGlobalObjectService")
@@ -11,6 +12,55 @@ local jay = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/rel
 
 local CraftingTable = ReplicatedStorage.Modules.UpdateService.DinoEvent:WaitForChild("DinoCraftingTable")
 local Workbench = "DinoEventWorkbench"
+
+local function sendWebhook()
+	if not getgenv().Webhook or getgenv().Webhook == "" then return end
+
+	local validEggs = {
+		["Dinosaur Egg"] = "Dinosaur Egg",
+		["Primal Egg"] = "Primal Egg"
+	}
+
+	local eggType = validEggs[getgenv().Egg]
+	if not eggType then
+		warn("Invalid Egg type: " .. tostring(getgenv().Egg))
+		return
+	end
+
+	for _, tool in ipairs(Backpack:GetChildren()) do
+		if tool:IsA("Tool") and tool:GetAttribute("h") == eggType then
+			local quantity = tool:GetAttribute("e") or "Unknown"
+
+			local data = {
+				embeds = {{
+					title = "🎉 Egg Crafted",
+					color = 65280,
+					fields = {
+						{ name = "Egg", value = eggType, inline = true },
+						{ name = "Quantity", value = tostring(quantity), inline = true }
+					},
+					timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ")
+				}}
+			}
+
+			local jsonData = HttpService:JSONEncode(data)
+
+			local req = syn and syn.request or request or http_request
+			if req then
+				req({
+					Url = getgenv().Webhook,
+					Method = "POST",
+					Headers = {
+						["Content-Type"] = "application/json"
+					},
+					Body = jsonData
+				})
+			end
+
+			break
+		end
+	end
+end
 
 if getgenv().Egg ~= "Dinosaur Egg" and getgenv().Egg ~= "Primal Egg" then
 	jay:Notify({
@@ -82,20 +132,14 @@ jay:Notify({
 	Content = "Successfully crafted " .. getgenv().Egg,
 	Duration = 4
 })
-task.wait(3)
+
+sendWebhook()
+task.wait(1)
 
 jay:Notify({
 	Title = "Rejoining",
 	Content = "Rejoining current server...",
 	Duration = 3
 })
-
-local eggValue = getgenv().Egg
-local queueScript = 'getgenv().Egg = "' .. eggValue .. '"\n' ..'loadstring(game:HttpGet("https://raw.githubusercontent.com/Jay-Devss/Jay-Hub/refs/heads/main/primal-vulnv3.lua"))()'
-if queue_on_teleport then
-	queue_on_teleport(queueScript)
-elseif syn and syn.queue_on_teleport then
-	syn.queue_on_teleport(queueScript)
-end
 
 TeleportService:Teleport(game.PlaceId)
