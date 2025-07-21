@@ -82,7 +82,7 @@ jay:Notify({
 	Content = "Successfully crafted " .. getgenv().Egg,
 	Duration = 4
 })
-task.wait(1)
+task.wait(3)
 
 jay:Notify({
 	Title = "Rejoining",
