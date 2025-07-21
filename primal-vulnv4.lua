@@ -39,7 +39,9 @@ local function sendWebhook()
 						{ name = "Egg", value = eggType, inline = true },
 						{ name = "Quantity", value = tostring(quantity), inline = true }
 					},
-					timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ")
+					footer = {
+						text = "Made with ❤️ by Jay Devs | " .. os.date("!%H:%M:%S UTC")
+					}
 				}}
 			}
 
