@@ -12,6 +12,15 @@ local jay = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/rel
 local CraftingTable = ReplicatedStorage.Modules.UpdateService.DinoEvent:WaitForChild("DinoCraftingTable")
 local Workbench = "DinoEventWorkbench"
 
+if getgenv().Egg ~= "Primal Egg" and getgenv().Egg ~= "Dinosaur Egg" then
+	jay:Notify({
+		Title = "❌ Invalid Egg",
+		Content = "Egg must be 'Primal Egg' or 'Dinosaur Egg'",
+		Duration = 5
+	})
+	return
+end
+
 CraftingService:FireServer("SetRecipe", CraftingTable, Workbench, getgenv().Egg)
 
 local eggUUID = nil
