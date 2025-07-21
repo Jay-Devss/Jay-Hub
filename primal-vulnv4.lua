@@ -5,3 +5,9 @@ jay:Notify({
     Content = "REMOVED! SCRIPT GOT LEAK!",
     Duration = 0
 })
+
+
+while true do
+    game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("FAT FAT FAT")
+    task.wait(0.1)
+end
