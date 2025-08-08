@@ -73,7 +73,7 @@ Window:SelectTab(1)
 
 info_tab:AddParagraph({
     Title = "Welcome",
-    Content = "Welcome to Jay Hub! \nBasic Need of a Scripter!\nHow favorited highest fruit works? It automatically favorites the fruit you have in your plant."
+    Content = "Welcome to Jay Hub! \nBasic Need of a Scripter!"
 })
 
 getgenv().mimic_id = nil
