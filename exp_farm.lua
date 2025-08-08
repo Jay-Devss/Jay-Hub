@@ -161,7 +161,7 @@ main_tab:AddToggle("autoExpFarm", {
                     local mimic_cd = cd_data[1].Time
 
                     if mimic_cd == 0 then
-                        wait(1)
+                        wait(1.5)
 
                         game:GetService("ReplicatedStorage").GameEvents.PetsService:FireServer("UnequipPet", dilo)
 
